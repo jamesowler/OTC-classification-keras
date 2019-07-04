@@ -1,6 +1,7 @@
 from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Activation, BatchNormalization
 from keras.optimizers import Adam
 from keras.models import Sequential
+from keras.utils import multi_gpu_model
 
 from main.params import params
 
@@ -57,6 +58,9 @@ def CNN_plus_batch_norm():
     model.add(Flatten())
     model.add(Dense(params['num_classes']))
     model.add(Activation('softmax'))
+
+    if params['nb_GPUS'] < 1:
+        model = multi_gpu_model(model, gpus=params['nb_GPUs'])
 
     model.compile(optimizer=Adam(lr=float(params['learning_rate'])), loss=params['loss_method'])
 

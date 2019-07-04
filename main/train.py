@@ -1,8 +1,10 @@
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
+from keras.callbacks import ModelCheckpoint
 from main.params import params
 from main.model import CNN_plus_batch_norm
 import glob
+import os
 
 model = CNN_plus_batch_norm()
 
@@ -33,12 +35,24 @@ def train():
 
     train_generator, train_steps_per_epoch = data_generator('../data/OCT2017/train')
     val_generator, val_steps_per_epoch = data_generator('../data/OCT2017/val')
-    model.fit_generator(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=params['nb_epoch'],
+
+    if not os.path.exists('../saved_models'):
+        os.mkdir('../saved_models')
+
+    ModelCheckpoint(f'../saved_models/{params["model_name"]}' + '{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss', verbose=0, save_best_only=True,
+                                    save_weights_only=False, mode='auto', period=1)
+
+    history = model.fit_generator(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=params['nb_epoch'],
                         validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=1)
+
+    return history
 
 
 if __name__ == '__main__':
 
+    from main.validation import plot_losses
+
     print('Begin model training \n')
 
-    train()
+    history = train()
+    plot_losses(history)
