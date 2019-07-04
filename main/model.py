@@ -59,7 +59,7 @@ def CNN_plus_batch_norm():
     model.add(Dense(params['num_classes']))
     model.add(Activation('softmax'))
 
-    if params['nb_GPUS'] < 1:
+    if params['nb_GPUs'] < 1:
         model = multi_gpu_model(model, gpus=params['nb_GPUs'])
 
     model.compile(optimizer=Adam(lr=float(params['learning_rate'])), loss=params['loss_method'])

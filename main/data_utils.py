@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import glob
 
-
+classes = ['CNV', 'DME', 'DRUNSEN', 'NORMAL']
 
 def find_median_dimensions():
     files = glob.glob('/Users/jamesowler/Projects/Deep-learning/OTC/data/OCT2017/test/*/*')

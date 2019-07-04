@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
 def plot_losses(history_object, filepath='../train_vs_val_loss.png'):
 
