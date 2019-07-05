@@ -1,8 +1,8 @@
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint
-from main.params import params
-from main.model import CNN_plus_batch_norm
+from params import params
+from model import CNN_plus_batch_norm
 import glob
 import os
 
@@ -10,6 +10,10 @@ model = CNN_plus_batch_norm()
 
 
 def data_generator(dir_path):
+
+    '''
+    Creates generator that can perform image augmentation on-the-fly
+    '''
 
     datagen = ImageDataGenerator(zoom_range=0.1,
                                    rotation_range=3,
@@ -29,7 +33,7 @@ def data_generator(dir_path):
 def train():
 
     '''
-    Runs training of the model with a progress bar
+    Runs training of the model with progress bar
     :return:
     '''
 
@@ -39,8 +43,9 @@ def train():
     if not os.path.exists('../saved_models'):
         os.mkdir('../saved_models')
 
+    # saved new model (overwrites current model) every 5 epochs if validation loss is less than previous model
     ModelCheckpoint(f'../saved_models/{params["model_name"]}' + '{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss', verbose=0, save_best_only=True,
-                                    save_weights_only=False, mode='auto', period=1)
+                                    save_weights_only=False, mode='auto', period=5)
 
     history = model.fit_generator(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=params['nb_epoch'],
                         validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=1)
@@ -50,7 +55,7 @@ def train():
 
 if __name__ == '__main__':
 
-    from main.validation import plot_losses
+    from validation import plot_losses
 
     print('Begin model training \n')
 
