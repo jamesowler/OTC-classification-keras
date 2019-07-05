@@ -45,7 +45,7 @@ def train():
 
     # saved new model (overwrites current model) every 5 epochs if validation loss is less than previous model
     checkpoint_save = ModelCheckpoint(f'../saved_models/{params["model_name"]}' + '{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss', verbose=0, save_best_only=True,
-                                    save_weights_only=False, mode='auto', period=5)
+                                    save_weights_only=False, mode='auto', period=1)
 
     checkpoint_list = [checkpoint_save]
     history = model.fit_generator(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=params['nb_epoch'],
