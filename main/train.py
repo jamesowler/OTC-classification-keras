@@ -1,8 +1,8 @@
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint
-from params import params
-from model import CNN_plus_batch_norm
+from .params import params
+from .model import CNN_plus_batch_norm
 import glob
 import os
 
@@ -44,18 +44,19 @@ def train():
         os.mkdir('../saved_models')
 
     # saved new model (overwrites current model) every 5 epochs if validation loss is less than previous model
-    ModelCheckpoint(f'../saved_models/{params["model_name"]}' + '{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss', verbose=0, save_best_only=True,
+    checkpoint_save = ModelCheckpoint(f'../saved_models/{params["model_name"]}' + '{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss', verbose=0, save_best_only=True,
                                     save_weights_only=False, mode='auto', period=5)
 
+    checkpoint_list = [checkpoint_save]
     history = model.fit_generator(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=params['nb_epoch'],
-                        validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=1)
+                        validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=1, checkpoint=checkpoint_list)
 
     return history
 
 
 if __name__ == '__main__':
 
-    from validation import plot_losses
+    from .validation import plot_losses
 
     print('Begin model training \n')
 

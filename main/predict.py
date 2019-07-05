@@ -6,7 +6,7 @@ from params import params
 import numpy as np
 
 
-def inference_from_model_file(file_path, model_file_path='./model.h5'):
+def predict(file_path, model_file_path='./model.h5'):
 
     X_final = np.zeros(1, params['image_size_X'])
     X = main.data_utils.preprocess(file_path, params['image_size_X'], params['image_size_Y'])

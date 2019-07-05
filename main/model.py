@@ -3,7 +3,7 @@ from keras.optimizers import Adam
 from keras.models import Sequential
 from keras.utils import multi_gpu_model
 
-from params import params
+from .params import params
 
 
 def CNN_plus_batch_norm():
