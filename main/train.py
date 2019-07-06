@@ -1,8 +1,8 @@
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint
-from .params import params
-from .model import CNN_plus_batch_norm
+from params import params
+from model import CNN_plus_batch_norm
 import glob
 import os
 
@@ -56,7 +56,7 @@ def train():
 
 if __name__ == '__main__':
 
-    from .validation import plot_losses
+    from validation import plot_losses
 
     print('Begin model training \n')
 
