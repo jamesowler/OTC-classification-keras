@@ -13,6 +13,8 @@ def CNN_plus_batch_norm():
 
     Classification of optical coherence tomography images
 
+    VVG16 like model with batch normalisation
+
     :return:
     '''
 
@@ -22,40 +24,42 @@ def CNN_plus_batch_norm():
 
     model = Sequential()
 
-    # 32
+    # 32 - Block 1
     model.add(Conv2D(32, kernal_size, padding='same', activation='relu', input_shape=input_shape, name='Conv_0_0'))
     model.add(BatchNormalization())
-    model.add(Conv2D(64, kernal_size, padding='same', activation='relu', name='Conv_0_1'))
+    model.add(Conv2D(32, kernal_size, padding='same', activation='relu', input_shape=input_shape, name='Conv_0_1'))
+    model.add(BatchNormalization())
+    # MP 1
+    model.add(MaxPooling2D((nb_pool, nb_pool), padding='same'))
+
+    # 64 - Block 2
+    model.add(Conv2D(64, kernal_size, padding='same', activation='relu', name='Conv_1_0'))
+    model.add(BatchNormalization())
+    model.add((Conv2D(64, kernal_size, padding='same', activation='relu', name='Conv_1_1')))
     model.add(BatchNormalization())
     # MP 2
     model.add(MaxPooling2D((nb_pool, nb_pool), padding='same'))
 
-    # 64
-    model.add((Conv2D(64, kernal_size, padding='same', activation='relu', name='Conv_1_0')))
+    # 128 - Block 3
+    model.add(Conv2D(128, kernal_size, padding='same', activation='relu', name='Conv_2_0'))
     model.add(BatchNormalization())
-    model.add(Conv2D(128, kernal_size, padding='same', activation='relu', name='Conv_1_1'))
+    model.add((Conv2D(128, kernal_size, padding='same', activation='relu', name='Conv_2_1')))
+    model.add(BatchNormalization())
+    # MP 3
+    model.add(MaxPooling2D((nb_pool, nb_pool), padding='same'))
+
+    # 256 - Block 4
+    model.add((Conv2D(256, kernal_size, padding='same', activation='relu', name='Conv_3_0')))
+    model.add(BatchNormalization())
+    model.add((Conv2D(256, kernal_size, padding='same', activation='relu', name='Conv_3_1')))
     model.add(BatchNormalization())
     # MP 4
     model.add(MaxPooling2D((nb_pool, nb_pool), padding='same'))
 
-    # 128
-    model.add((Conv2D(128, kernal_size, padding='same', activation='relu', name='Conv_2_0')))
+    # 256 - Block 5
+    model.add((Conv2D(256, kernal_size, padding='same', activation='relu', name='Conv_4_0')))
     model.add(BatchNormalization())
-    model.add((Conv2D(256, kernal_size, padding='same', activation='relu', name='Conv_2_1')))
-    model.add(BatchNormalization())
-    # MP 8
-    model.add(MaxPooling2D((nb_pool, nb_pool), padding='same'))
-
-    # 256
-    model.add((Conv2D(256, kernal_size, padding='same', activation='relu', name='Conv_3_0')))
-    model.add(BatchNormalization())
-    model.add((Conv2D(512, kernal_size, padding='same', activation='relu', name='Conv_3_1')))
-    model.add(BatchNormalization())
-    # MP 16
-    model.add(MaxPooling2D((nb_pool, nb_pool), padding='same'))
-
-    # 512
-    model.add((Conv2D(512, kernal_size, padding='same', activation='relu', name='Conv_4_0')))
+    model.add((Conv2D(256, kernal_size, padding='same', activation='relu', name='Conv_4_1')))
     model.add(BatchNormalization())
 
     model.add(Flatten())

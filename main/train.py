@@ -49,7 +49,7 @@ def train():
 
     checkpoint_list = [checkpoint_save]
     history = model.fit_generator(train_generator, steps_per_epoch=train_steps_per_epoch, epochs=params['nb_epoch'],
-                        validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=1, checkpoint=checkpoint_list)
+                        validation_data=val_generator, validation_steps=val_steps_per_epoch, verbose=1, callbacks=checkpoint_list)
 
     return history
 
